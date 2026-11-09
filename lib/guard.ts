@@ -46,7 +46,10 @@ export function ensureDisclaimer(text: string) {
 
 export function guard(answer: string, opts: { refused: boolean; expressedUncertainty: boolean }): Verdict {
   const checks: Verdict["checks"] = [];
-  const text = answer || "";
+  // A refusal is the safe output. Scanning it for the patterns it exists to
+  // describe ("I can't recommend a fund", "I won't predict returns") produced
+  // false failures, so the content checks run only on answers.
+  const text = opts.refused ? "" : (answer || "");
 
   // 1 — no specific fund or stock recommendation
   const namesFund = FUND_WORDS.test(text);
@@ -83,7 +86,7 @@ export function guard(answer: string, opts: { refused: boolean; expressedUncerta
     id: "disclaimed",
     label: "States that it is not investment advice",
     pass: true,
-    detail: hasDisclaimer(text) ? undefined : "was missing, added automatically",
+    detail: hasDisclaimer(answer || "") ? undefined : "was missing, added automatically",
   });
 
   // 5 — admits the limits of what it was given
