@@ -20,10 +20,14 @@ const FUND_WORDS =
 const RECOMMEND_VERBS =
   /\b(invest in|switch to|buy|go for|choose|pick|shift to|move to|start a sip in|better fund|best fund|recommend)\b/i;
 
+// Forward-looking only. A percentage describing what ALREADY happened is the
+// core of this product ("you are up 18.75% so far") and must not be blocked —
+// a user test caught the earlier rule refusing exactly that question.
 const PREDICTION =
-  /\b(will (?:give|get|grow|return|double|reach)|you (?:will|'ll) (?:get|earn|make)|expected returns? of|guaranteed|assured returns?|should return|likely to return)\b/i;
+  /\b(will (?:give|get|grow|return|double|reach)|you (?:will|'ll) (?:get|earn|make)|expected returns? of|guaranteed|assured returns?|should return|likely to return|projected to|by (?:next year|20\d\d) (?:it|this|your))\b/i;
 
-const PERCENT_FUTURE = /\b\d{1,2}(\.\d+)?\s?%\s?(per annum|p\.?a\.?|annually|returns?|cagr)/i;
+const PERCENT_FUTURE =
+  /\b(?:expect|expected|projected|estimate[sd]?|assume|will be|should be|could reach|target(?:ing)?)\b[^.]{0,60}?\d{1,2}(?:\.\d+)?\s?%/i;
 
 const URGENCY =
   /\b(act now|don'?t miss|hurry|right now before|last chance|limited time|you'?ll regret|before it'?s too late|miss out|falling behind|everyone else is)\b/i;
